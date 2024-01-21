@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.OrderMapper">
+
+
+    <insert id="insertOrder" parameterType="order">
+        insert into `order`(order_id,order_no,flower_id,order_number,order_price,location_id,user_id) value
+                         (#{orderId},#{orderNo},#{flowerId},#{orderNumber},#{orderPrice},#{locationId},#{userId})
+    </insert>
+    <update id="updateOrderCommentState" parameterType="integer">
+         update `order` set comment_state = 1 where order_id = #{orderId}
+    </update>
+
+
+    <delete id="delOrder" parameterType="order">
+        delete from `order` where shop_id=#{shopId} and user_id = #{userId}
+    </delete>
+
+
+    <!--    查询-->
+    <resultMap id="orderMap" type="order">
+        <id column="order_id" property="orderId" />
+        <result column="order_no" property="orderNo" />
+        <result column="flower_id" property="flowerId" />
+        <result column="order_number" property="orderNumber" />
+        <result column="order_price" property="orderPrice" />
+        <result column="location_id" property="locationId" />
+        <result column="user_id" property="userId" />
+        <result column="comment_state" property="commentState" />
+        <!--   一对多-->
+        <collection property="flower" ofType="flower">
+            <id column="flower_id" property="flowerId" />
+            <result column="flower_name" property="flowerName" />
+            <result column="flower_price" property="flowerPrice" />
+            <result column="flower_priced" property="flowerPriced" />
+            <result column="flower_img" property="flowerImg" />
+            <result column="flower_sales" property="flowerSales" />
+            <result column="flower_specification" property="flowerSpecification" />
+            <result column="flower_detail1" property="flowerDetail1" />
+            <result column="flower_detail2" property="flowerDetail2" />
+            <result column="flower_detail3" property="flowerDetail3" />
+        </collection>
+<!--        位置  -->
+        <collection property="location" ofType="location">
+            <id column="location_id" property="locationId" />
+            <result column="location_name" property="locationName" />
+            <result column="location_state" property="locationState" />
+            <result column="user_id" property="userId" />
+        </collection>
+<!--        评论  -->
+        <collection property="comment" ofType="comment">
+            <id column="comment_id" property="commentId" />
+            <result column="comment_content" property="commentContent" />
+            <result column="order_id" property="orderId" />
+            <result column="flower_id" property="flowerId" />
+            <result column="user_id" property="userId" />
+        </collection>
+    </resultMap>
+
+    <select id="findOrderUserId" resultMap="orderMap">
+        select o.order_id,o.order_no,o.flower_id,o.order_number,o.order_price,o.location_id,o.user_id,o.comment_state,
+               f.flower_id,flower_name,
+               flower_price,flower_priced,flower_img,flower_sales,flower_specification,
+               flower_detail1,flower_detail2,flower_detail3,
+               l.location_id,location_name,l.user_id,location_state,
+               c.comment_id,c.comment_content,c.order_id,c.flower_id,c.user_id
+        from (select order_id,order_no,flower_id,order_number,order_price,location_id,user_id,comment_state from `order` where user_id = #{userId}) o
+                   left join flower f on o.flower_id = f.flower_id
+                   left join location l on o.location_id = l.location_id
+                   left join comment c on o.order_id = c.order_id
+
+    </select>
+
+    <select id="findOrderId" resultMap="orderMap">
+        select o.order_id,o.order_no,o.flower_id,o.order_number,o.order_price,o.location_id,o.user_id,o.comment_state,
+               f.flower_id,flower_name,
+               flower_price,flower_priced,flower_img,flower_sales,flower_specification,
+               flower_detail1,flower_detail2,flower_detail3,
+               l.location_id,location_name,l.user_id,location_state
+        from (select order_id,order_no,flower_id,order_number,order_price,location_id,user_id,comment_state, from `order` where order_id = #{orderId}) o
+                 left join flower f on o.flower_id = f.flower_id left join location l on o.location_id = l.location_id
+
+    </select>
+
+</mapper>

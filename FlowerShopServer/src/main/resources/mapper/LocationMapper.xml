@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.LocationMapper">
+
+
+    <insert id="insertLocation" parameterType="location">
+        insert into location(location_id,location_name,user_id,location_state) value (#{locationId},#{locationName},#{userId},#{locationState})
+    </insert>
+    <update id="chengLocation" parameterType="location">
+        update location set location_name = #{locationName}, location_state = #{locationState} where user_id=#{userId} and location_id = #{locationId}
+    </update>
+    <update id="chengLocationState" parameterType="integer">
+        update location set location_state = 0  where user_id=#{userId}
+    </update>
+    <delete id="delLocation" parameterType="location">
+        delete from location where  location_id = #{locationId}
+    </delete>
+    <select id="findLocation" resultType="location">
+        select location_id,location_name,user_id,location_state from location where user_id = #{userId}
+    </select>
+    <select id="findLocationState" resultType="location">
+        select location_id,location_name,user_id,location_state from location where user_id = #{userId} and location_state = 1
+    </select>
+    <select id="findLocationId" resultType="location">
+        select location_id,location_name,user_id,location_state from location where location_id = #{locationId}
+    </select>
+
+
+</mapper>

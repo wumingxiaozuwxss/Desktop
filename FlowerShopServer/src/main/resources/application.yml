@@ -1,0 +1,32 @@
+# 端口号
+port: 8080
+servlet:
+  # 项目路径
+  context-path: /
+# 连接数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///flowerstore?serverTimezone=PRC
+    username: root
+    password: .0.0.0@WXss#
+    type: com.alibaba.druid.pool.DruidDataSource
+  main:
+    allow-circular-references: true
+  mvc:
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations: /META-INF/resources/,classpath:/resources/,classpath:/public/,classpath:/static/,file:C:\Users\Administrator\Desktop\FlowerShopServer\src\main\resources\static
+
+# mybatis 配置 扫描 配置别名 下划线和驼峰的转换
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.demo.entiy
+  configuration:
+    map-underscore-to-camel-case: true # 下划线驼峰转换
+# log 输出
+logging:
+  level:
+    com.example.demo.mapper: DEBUG
+

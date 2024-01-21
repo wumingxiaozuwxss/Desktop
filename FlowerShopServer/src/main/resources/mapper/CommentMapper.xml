@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CommentMapper">
+
+
+    <insert id="insertComment" parameterType="comment">
+        insert into comment(comment_id,comment_content,order_id,flower_id,user_id) values (#{commentId},#{commentContent},#{orderId},#{flowerId,},#{userId})
+    </insert>
+
+    
+    <delete id="delComment" parameterType="comment">
+        delete from comment where shop_id=#{shopId} and user_id = #{userId}
+    </delete>
+
+
+    <resultMap id="commentMap" type="comment">
+        <id column="comment_id" property="commentId" />
+        <result column="comment_content" property="commentContent" />
+        <result column="order_id" property="orderId" />
+        <result column="flower_id" property="flowerId" />
+        <result column="user_id" property="userId" />
+        <!--   一对多-->
+        <collection property="user" ofType="user">
+            <id column="user_id" property="userId" />
+            <result column="user_name" property="userName" />
+        </collection>
+    </resultMap>
+    <select id="findComment" resultMap="commentMap">
+        select c.comment_id,c.comment_content,c.order_id,c.flower_id,c.user_id,
+            u.user_id,u.user_name,u.user_password
+        from (select comment_id,comment_content,order_id,flower_id,user_id from comment where flower_id = #{flowerId}) c
+        left join `user` u on `c`.user_id = u.user_id
+    </select>
+
+    <!--    查询-->
+
+
+<!--    <select id="findFlowerTypeList" resultMap="flowerTypeMap">-->
+<!--        select t.type_id,t.type_name,t.flower_id ,f.flower_id,flower_name,-->
+<!--               flower_price,flower_priced,flower_img,flower_sales,flower_specification,-->
+<!--               flower_detail1,flower_detail2,flower_detail3 from (select type_id,type_name,flower_id from flowertype where type_name = #{name}) t left join flower f on t.flower_id = f.flower_id-->
+<!--    </select>-->
+
+
+</mapper>

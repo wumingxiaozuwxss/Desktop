@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.FlowerMapper">
+
+    <insert id="insertFlower" parameterType="flower" >
+        insert into flower(flower_id,flower_name,flower_price,flower_priced,flower_img,flower_sales,flower_specification,flower_detail1,flower_detail2,flower_detail3) value
+            (#{flowerId},#{flowerName},#{flowerPrice},#{flowerPriced},#{flowerImg},#{flowerSales},#{flowerSpecification},#{flowerDetail1},#{flowerDetail2},#{flowerDetail3})
+    </insert>
+
+    <select id="count" resultType="int">
+        select count(1) from flower
+    </select>
+    <select id="findFlower" resultType="flower">
+        select flower_id,flower_name,flower_price,flower_priced,flower_img,flower_sales,flower_specification,flower_detail1,flower_detail2,flower_detail3 from flower
+    </select>
+    <select id="findFlowerById" resultType="flower">
+        select flower_id,flower_name,flower_price,flower_priced,flower_img,flower_sales,flower_specification,flower_detail1,flower_detail2,flower_detail3 from flower
+        where flower_id = #{flowerId}
+    </select>
+
+</mapper>

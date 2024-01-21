@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ShopCartMapper">
+
+
+    <insert id="insertShopCart" parameterType="shopCart">
+        insert into shopcart(shop_id,shop_number,flower_id,user_id) value (#{ shopId},#{shopNumber},#{flowerId},#{userId})
+    </insert>
+    <update id="upShopCart" parameterType="shopCart">
+        update shopcart set shop_number = #{shopNumber} where shop_id = #{shopId}
+    </update>
+
+
+    <delete id="delShopCart" parameterType="integer">
+        delete from shopcart where shop_id=#{shopId}
+    </delete>
+
+<!--    查询-->
+    <resultMap id="flowerTypeMap" type="shopCart">
+        <id column="shop_id" property="shopId" />
+        <result column="shop_number" property="shopNumber" />
+        <result column="user_id" property="userId" />
+        <result column="flower_id" property="flowerId" />
+        <!--   一对多-->
+        <collection property="flower" ofType="flower">
+            <id column="flower_id" property="flowerId" />
+            <result column="flower_name" property="flowerName" />
+            <result column="flower_price" property="flowerPrice" />
+            <result column="flower_priced" property="flowerPriced" />
+            <result column="flower_img" property="flowerImg" />
+            <result column="flower_sales" property="flowerSales" />
+            <result column="flower_specification" property="flowerSpecification" />
+            <result column="flower_detail1" property="flowerDetail1" />
+            <result column="flower_detail2" property="flowerDetail2" />
+            <result column="flower_detail3" property="flowerDetail3" />
+        </collection>
+    </resultMap>
+
+    <select id="findShopCart" resultMap="flowerTypeMap">
+        select s.shop_id,s.shop_number,s.user_id,s.flower_id ,f.flower_id,flower_name,
+               flower_price,flower_priced,flower_img,flower_sales,flower_specification,
+               flower_detail1,flower_detail2,flower_detail3 from (select shop_id,shop_number,flower_id,user_id from shopcart where user_id = #{userId}) s left join flower f on s.flower_id = f.flower_id
+    </select>
+    <select id="findShopCartType" resultType="shopCart">
+        select shop_id,shop_number,user_id,flower_id from shopcart where user_id = #{userId} and flower_id = #{flowerId}
+    </select>
+
+
+</mapper>
